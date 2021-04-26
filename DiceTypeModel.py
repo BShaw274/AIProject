@@ -57,4 +57,6 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 images, labels = tuple(zip(*trainData))
-model.fit(trainData, epochs=5, validation_data = validationData)
+model.fit(trainData, epochs=6, validation_data = validationData)
+model.save('savedModels/DiceTypeModel')
+
