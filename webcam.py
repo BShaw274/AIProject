@@ -7,7 +7,7 @@ print(tf.__version__)
 img_height = 128
 img_width = 128
 dice_type_model = tf.keras.models.load_model('savedModels/DiceTypeModel')
-dice_roll_model = tf.keras.models.load_model('savedModels/model')
+dice_roll_model = tf.keras.models.load_model('savedModels/model2')
 PATH_TO_TRAIN_DATA = 'DiceType/dice/train'
 trainData = tf.keras.preprocessing.image_dataset_from_directory(
     PATH_TO_TRAIN_DATA,
