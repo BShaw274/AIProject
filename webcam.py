@@ -1,5 +1,6 @@
 # import the opencv library
 import cv2
+import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 print(tf.__version__)
@@ -7,28 +8,39 @@ img_height = 128
 img_width = 128
 dice_type_model = tf.keras.models.load_model('savedModels/DiceTypeModel')
 dice_roll_model = tf.keras.models.load_model('savedModels/model')
+PATH_TO_TRAIN_DATA = 'DiceType/dice/train'
+trainData = tf.keras.preprocessing.image_dataset_from_directory(
+    PATH_TO_TRAIN_DATA,
+    labels='inferred',
+    label_mode='int',
+    image_size=(img_height, img_width),
+    batch_size=32,
+    validation_split=0.2,
+    subset='training',
+    seed=100)
 
+class_names = trainData.class_names
 # define a video capture object
 vid = cv2.VideoCapture(0)
   
-while(True):
+#while(True):
       
     # Capture the video frame
     # by frame
-    ret, frame = vid.read()
+    #ret, frame = vid.read()
   
     # Display the resulting frame
-    cv2.imshow('frame', frame)
+    #cv2.imshow('frame', frame)
 
-    img = cv2.imread('test.jpg')
+    #img = cv2.imread('test.jpg')
       
     # the 'q' button is set as the
     # quitting button you may use any
     # desired button of your choice
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        cv2.imwrite("NewPicture.jpg",frame)
-        break
-image_path = '/NewPicture.jpg'
+   # if cv2.waitKey(1) & 0xFF == ord('q'):
+        #cv2.imwrite("NewPicture.jpg",frame)
+        #break
+image_path = 'NewPicture.jpg'
         
 img = keras.preprocessing.image.load_img(
     image_path, target_size=(img_height, img_width)
@@ -44,15 +56,12 @@ roll_score = tf.nn.softmax(dice_roll_prediction[0])
 
 print(
     "TYPE: This image most likely belongs to {} with a {:.2f} percent confidence."
-    .format(class_names[np.argmax(score)], 100 * np.max(score))
+    .format(class_names[np.argmax(type_score)], 100 * np.max(type_score))
 )
-
-dice_roll_prediction = dice_roll_model.predict(img_array)
-roll_score = tf.nn.softmax(dice_roll_prediction[0])
 
 print(
     "ROLL: This image most likely belongs to {} with a {:.2f} percent confidence."
-    .format(class_names[np.argmax(score)], 100 * np.max(score))
+    .format(np.argmax(roll_score)+1, 100 * np.max(roll_score))
 )
 
   
